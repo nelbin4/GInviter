@@ -31,7 +31,7 @@ You can customize the following settings in the Lua file:
 
 - `zones`: A table containing the names of the zones to search in.
 - `loopInterval`: The time interval (in seconds) between each search.
-- `level`: The level range to search for players.
+- `level`: The level to search for players.
 - Other UI-related settings can be adjusted within the code.
 
 ## Contributions
