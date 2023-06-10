@@ -21,9 +21,9 @@ GINVITER is a World of Warcraft addon that automates the process of inviting pla
 
 ## Usage
 
-- Simply Press Start or Stop Button or;
-- To start the search process, type `/ginviter start` in the chat.
-- To stop the search process, type `/ginviter stop` in the chat.
+- Simply Press Start or Stop Button, everything will run automatically.
+- To make UI show up, type `/ginviter show` in the chat.
+- To make UI hide, type `/ginviter hide` in the chat.
 
 ## Configuration
 
