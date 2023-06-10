@@ -16,16 +16,15 @@ This was tested for WoW Client Patch 3.3.5a (Wrath of the Lich King).
 
 ## Installation
 
-1. Download the latest version of GINVITER from the [GitHub repository](https://github.com/nelbin4/GINVITER).
+1. Download the latest version of GINVITER from the [GitHub repository](https://github.com/nelbin4/GINVITER/releases).
 2. Extract the downloaded files into your World of Warcraft `Interface/AddOns` folder.
-3. Create a folder named "GINVITER"
-4. Put GINVITER.lua GINVITER.toc GINVITER.xml inside the folder
-5. Restart World of Warcraft Client Program and Enable it in the Addon list
+3. Restart World of Warcraft Client Program and Enable it in the Addon list
 
 ## Usage
 
-- To start the search process, type `/GINVITER start` in the chat.
-- To stop the search process, type `/GINVITER stop` in the chat.
+- Simply Press Start or Stop Button or;
+- To start the search process, type `/ginviter start` in the chat.
+- To stop the search process, type `/ginviter stop` in the chat.
 
 ## Configuration
 
