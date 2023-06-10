@@ -1,0 +1,9 @@
+## Interface: 40200
+## Title: GINVITER
+## Author: Nelbin with CHATGPT
+## Notes: Search and Guild Invites players without a guild. Has a Basic Interface for status start and stop.
+## Version: 0.1.0
+## SavedVariablesPerCharacter: GINVITER_Message, GINVITER_NoInvite, GINVITER_MessageOnInvite, GINVITER_ActuallyInvite, GINVITER_LevelMin, GINVITER_LevelStop
+
+GINVITER.lua
+GINVTITER.xml
