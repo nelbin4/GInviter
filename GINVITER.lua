@@ -9,6 +9,9 @@ local loopInterval = 180
 -- What level to search
 local level = 80 
 
+-- Maximum number of invites before excluding a player
+local maxInvites = 2
+
 -- ##########################################################
 
 
@@ -16,7 +19,6 @@ local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
-local inviteCount = {}
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 110)
@@ -65,14 +67,24 @@ stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
-function GINVITER_Command(args)
+local excludeList = {}
+
+local function GINVITER_AddToExcludeList(playerName)
+    excludeList[playerName] = (excludeList[playerName] or 0) + 1
+end
+
+local function GINVITER_IsExcluded(playerName)
+    return excludeList[playerName] and excludeList[playerName] >= maxInvites
+end
+
+local function GINVITER_Command(args)
     if (args == "show") then
-        frame:Show()
+        GINVITER_ShowFrame()
     elseif (args == "hide") then
-        frame:Hide()
+        GINVITER_HideFrame()
     else
         statusText:SetText("GINVITER")
-        errorText:SetText("Usage: /GINVITER [show/hide]")
+        ChatFrame1:AddMessage("Usage: /GINVITER [show/hide]")
     end
 end
 
@@ -135,14 +147,9 @@ function GINVITER_InviteWhoResults()
     local numWhos = GetNumWhoResults()
     for index = 1, numWhos, 1 do
         local charname, guildname, level, race, class, zone, classFileName = GetWhoInfo(index)
-        if (guildname == "" and zone ~= "Dalaran Arena") then
-            if inviteCount[charname] == nil then
-                inviteCount[charname] = 1
-                GuildInvite(charname)
-            elseif inviteCount[charname] < 2 then
-                inviteCount[charname] = inviteCount[charname] + 1
-                GuildInvite(charname)
-            end
+        if (guildname == "" and zone ~= "Dalaran Arena" and not GINVITER_IsExcluded(charname)) then
+            GINVITER_AddToExcludeList(charname)
+            GuildInvite(charname)
         end
     end
 end
@@ -154,3 +161,11 @@ SLASH_GINVITER1 = "/GINVITER"
 SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
+
+function GINVITER_ShowFrame()
+    frame:Show()
+end
+
+function GINVITER_HideFrame()
+    frame:Hide()
+end
