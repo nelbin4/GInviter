@@ -1,6 +1,7 @@
 # GINVITER
 
 GINVITER is a World of Warcraft addon that automates the process of inviting players to your guild. It searches for players within a specified level range and zone and invites those who are not already in a guild.
+This was tested for WoW Client Patch 3.3.5a (Wrath of the Lich King).
 
 ## Features
 
