@@ -4,10 +4,10 @@
 local zones = { "Dalaran", "The Ruby Sanctum" }
 
 -- Loop interval in seconds
-local loopInterval = 180
+local loopInterval = 180 
 
 -- What level to search
-local level = 80
+local level = 80 
 
 -- ##########################################################
 
@@ -16,6 +16,7 @@ local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
+local inviteCount = {}
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 110)
@@ -70,13 +71,14 @@ function GINVITER_Command(args)
     elseif (args == "hide") then
         frame:Hide()
     else
-        DEFAULT_CHAT_FRAME:AddMessage("Usage: /GINVITER [show/hide]")
+        statusText:SetText("GINVITER")
+        errorText:SetText("Usage: /GINVITER [show/hide]")
     end
 end
 
 function GINVITER_StartSearch()
     if (CanGuildInvite() == false) then
-        statusText:SetText("You can't invite at the moment.")
+        errorText:SetText("You can't invite at the moment.")
         return
     end
     statusText:SetText("Searching")
@@ -96,7 +98,7 @@ function GINVITER_OnUpdate(args)
         if (timeLeft < 0) then
             if (CanGuildInvite() == false) then
                 GINVITER_StopSearch()
-                statusText:SetText("You can't invite anymore, stopping.")
+                errorText:SetText("You can't invite anymore, stopping.")
             else
                 GINVITER_SendSearch()
             end
@@ -134,7 +136,13 @@ function GINVITER_InviteWhoResults()
     for index = 1, numWhos, 1 do
         local charname, guildname, level, race, class, zone, classFileName = GetWhoInfo(index)
         if (guildname == "" and zone ~= "Dalaran Arena") then
-            GuildInvite(charname)
+            if inviteCount[charname] == nil then
+                inviteCount[charname] = 1
+                GuildInvite(charname)
+            elseif inviteCount[charname] < 2 then
+                inviteCount[charname] = inviteCount[charname] + 1
+                GuildInvite(charname)
+            end
         end
     end
 end
