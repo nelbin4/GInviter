@@ -4,13 +4,10 @@
 local zones = { "Dalaran", "The Ruby Sanctum" }
 
 -- Loop interval in seconds
-local loopInterval = 180 
+local loopInterval = 180
 
 -- What level to search
-local level = 80 
-
--- Exclude list for people who have already been invited
-local excludeList = {}
+local level = 80
 
 -- ##########################################################
 
@@ -68,19 +65,18 @@ stopButton:SetText("Stop")
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
 function GINVITER_Command(args)
-    if (args == "stop") then
-        GINVITER_StopSearch()
-    elseif (args == "start") then
-        GINVITER_StartSearch()
+    if (args == "show") then
+        frame:Show()
+    elseif (args == "hide") then
+        frame:Hide()
     else
-        statusText:SetText("GINVITER")
-        errorText:SetText("Usage: /GINVITER [start/stop]")
+        DEFAULT_CHAT_FRAME:AddMessage("Usage: /GINVITER [show/hide]")
     end
 end
 
 function GINVITER_StartSearch()
     if (CanGuildInvite() == false) then
-        errorText:SetText("You can't invite at the moment.")
+        statusText:SetText("You can't invite at the moment.")
         return
     end
     statusText:SetText("Searching")
@@ -100,7 +96,7 @@ function GINVITER_OnUpdate(args)
         if (timeLeft < 0) then
             if (CanGuildInvite() == false) then
                 GINVITER_StopSearch()
-                errorText:SetText("You can't invite anymore, stopping.")
+                statusText:SetText("You can't invite anymore, stopping.")
             else
                 GINVITER_SendSearch()
             end
@@ -135,20 +131,10 @@ end
 
 function GINVITER_InviteWhoResults()
     local numWhos = GetNumWhoResults()
-    local invitesSent = 0  -- Counter for guild invites sent per search
-
     for index = 1, numWhos, 1 do
         local charname, guildname, level, race, class, zone, classFileName = GetWhoInfo(index)
-
-        -- Check if the player is already invited or in the exclude list
-        if (guildname == "" and zone ~= "Dalaran Arena" and not excludeList[charname]) then
+        if (guildname == "" and zone ~= "Dalaran Arena") then
             GuildInvite(charname)
-            excludeList[charname] = true  -- Add the player to the exclude list
-            invitesSent = invitesSent + 1
-
-            if invitesSent >= 2 then
-                break  -- Limit invites to two per search
-            end
         end
     end
 end
