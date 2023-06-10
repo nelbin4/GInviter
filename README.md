@@ -7,7 +7,7 @@ GINVITER is a World of Warcraft addon that automatically invites players without
 
 ## Features
 - Automatically invites players without a guild in specified zones.
-- Limits guild invites to a maximum of two per person to avoid spamming or annoying players.
+- Limits guild invites to a maximum of two per person to avoid spam or annoy players.
 - Customizable list of zones to search for potential recruits.
 - User-friendly UI with start/stop buttons and status display.
 - Slash commands to show/hide the addon UI.
