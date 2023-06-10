@@ -9,6 +9,9 @@ local loopInterval = 180
 -- What level to search
 local level = 80 
 
+-- Exclude list for people who have already been invited
+local excludeList = {}
+
 -- ##########################################################
 
 
@@ -132,10 +135,20 @@ end
 
 function GINVITER_InviteWhoResults()
     local numWhos = GetNumWhoResults()
+    local invitesSent = 0  -- Counter for guild invites sent per search
+
     for index = 1, numWhos, 1 do
         local charname, guildname, level, race, class, zone, classFileName = GetWhoInfo(index)
-        if (guildname == "" and zone ~= "Dalaran Arena") then
+
+        -- Check if the player is already invited or in the exclude list
+        if (guildname == "" and zone ~= "Dalaran Arena" and not excludeList[charname]) then
             GuildInvite(charname)
+            excludeList[charname] = true  -- Add the player to the exclude list
+            invitesSent = invitesSent + 1
+
+            if invitesSent >= 2 then
+                break  -- Limit invites to two per search
+            end
         end
     end
 end
