@@ -4,11 +4,12 @@ GINVITER is a World of Warcraft addon that automates the process of inviting pla
 
 ## Features
 
-- Search for players within a specific level range and zone
+- User-friendly interface for easy interaction
+- Search for players within a specific zone and level
 - Automatically invite players who are not already in a guild
 - Configurable search intervals and target zones
 - Start and stop the search process with a simple command
-- User-friendly interface for easy interaction
+
 
 ## Installation
 
