@@ -14,14 +14,13 @@ local maxInvites = 2
 
 -- ##########################################################
 
-
 local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
-frame:SetSize(145, 110)
+frame:SetSize(145, 135)
 frame:SetPoint("CENTER")
 frame:SetMovable(true)
 frame:EnableMouse(true)
@@ -35,8 +34,34 @@ frame:SetBackdrop({
     insets = { left = 4, right = 4, top = 4, bottom = 4 },
 })
 
+-- Create the title bar frame
+local titleBar = CreateFrame("Frame", nil, frame)
+titleBar:SetSize(frame:GetWidth(), 25)
+titleBar:SetPoint("TOP", 0, 0)
+titleBar:SetBackdrop({
+    bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+    edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+    edgeSize = 16,
+    insets = { left = 4, right = 4, top = 4, bottom = 4 },
+})
+titleBar:SetBackdropColor(0.5, 0, 0.1, 1) -- Maroon background color
+
+-- Create the title text
+local titleText = titleBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+titleText:SetPoint("CENTER", titleBar, "CENTER")
+titleText:SetText("GInviter") -- Set the title text
+titleText:SetTextColor(1, 1, 1) -- White text color
+
+-- Create the hide button
+local hideButton = CreateFrame("Button", nil, frame)
+hideButton:SetSize(25, 25)
+hideButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
+hideButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-HideButton-Up")
+hideButton:SetHighlightTexture("Interface\\Buttons\\UI-Panel-HideButton-Highlight")
+hideButton:SetScript("OnClick", function() GINVITER_HideFrame() end)
+
 local statusText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-statusText:SetPoint("TOP", 0, -10)
+statusText:SetPoint("TOP", titleBar, "BOTTOM", 0, -10)
 statusText:SetJustifyH("CENTER")
 statusText:SetText("Stopped")
 
@@ -51,7 +76,7 @@ timeValue:SetJustifyH("CENTER")
 timeValue:SetText("-")
 
 local errorText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-errorText:SetPoint("BOTTOMRIGHT", -10, 10)
+errorText:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -10, 10)
 errorText:SetJustifyH("RIGHT")
 errorText:SetText("")
 
@@ -132,7 +157,7 @@ function GINVITER_SendSearch()
         currentZone = 1
     end
 
-    local whoString = "g-\"\" " .. level .. "-" .. level .. " z-\"" .. zone .. "\""
+    local whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
     statusText:SetText("Searching in\n" .. zone)
     lastSearchTime = time()
     SendWho(whoString)
