@@ -1,6 +1,6 @@
 # GInviter
 
-GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrath of the Lich King)**. It automates the guild recruitment process by searching for potential members based on specific criteria and inviting them to join your guild. With GInviter, you can save time and effortlessly attract suitable players to enhance your guild's roster.
+GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrath of the Lich King)**. It automates the guild recruitment process by searching for potential members based on specified zones and inviting them to join your guild. With GInviter, you can save time and effortlessly attract suitable players to enhance your guild's roster.
 
 ![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/f8d7b2b5-8aa7-44dc-98af-87b68cb07d90)
 
