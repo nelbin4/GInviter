@@ -58,3 +58,4 @@ GInviter is not associated with or endorsed by Blizzard Entertainment. Use it at
 For any inquiries or questions, please contact [nelbin4](https://github.com/nelbin4).
 
 <meta name="google-site-verification" content="CJxfG4PJmq5s2ycX7alFov5QcI8IRpWT_YBACm8HbJ0" />
+<meta name="google-site-verification" content="CJxfG4PJmq5s2ycX7alFov5QcI8IRpWT_YBACm8HbJ0" />
