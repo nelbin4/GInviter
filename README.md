@@ -3,7 +3,8 @@
 ## Description
 GINVITER is a World of Warcraft addon that automatically invites players without a guild in specific zones to join your guild. It helps guild recruiters easily invite potential members while they explore the world. This is tested in WoW Client 3.3.5a (Wrath of the Lich King)
 
-![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/d0d5eae4-7db5-436f-b5be-97f281128442)
+![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/fb802ec0-501a-4d9d-9e88-21e699391166)
+
 
 ## Features
 - Automatically invites players without a guild in specified zones.
