@@ -27,6 +27,7 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 3. Click the **Start** button to initiate the search and invitation process.
 4. Monitor the progress in the GInviter frame.
 5. Click the **Stop** button to end the search process.
+6. Hide GInviter by typing `/ginviter hide` in the chat to work in the background.
 
 ## Modifying Variables
 
