@@ -23,11 +23,10 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 ## Usage
 
 1. Open GInviter by typing `/ginviter` or `/ginviter show` in the chat.
-2. Set your desired criteria for guild member search.
-3. Click the **Start** button to initiate the search and invitation process.
-4. Monitor the progress in the GInviter frame.
-5. Click the **Stop** button to end the search process.
-6. Hide GInviter by typing `/ginviter hide` in the chat to work in the background.
+2. Click the **Start** button to initiate the search and invitation process.
+3. Monitor the progress in the GInviter frame.
+4. Click the **Stop** button to end the search process.
+5. Hide GInviter by typing `/ginviter hide` in the chat to work in the background.
 
 ## Modifying Variables
 
