@@ -210,10 +210,11 @@ frame:SetClampedToScreen(true)
 
 function GINVITER_ShowFrame()
     frame:Show()
+    GINVITER_StartSearch() -- Start the search when the frame is shown
 end
 
 function GINVITER_HideFrame()
     frame:Hide()
 end
 
-print("|cff00ff00GInviter loaded.|r Type /ginviter show for UI. Check ginviter.lua file to change settings. Check GInviter in GitHub for updates.")
+print("|cff00ff00GInviter loaded.|r Use /ginviter show. Modify file ginviter.lua inside addon folder to your preference. Check github.com/nelbin4/ginviter for updates.")
