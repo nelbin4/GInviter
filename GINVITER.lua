@@ -1,7 +1,13 @@
 -- ##########################################################
 
+-- Search mode "zone" or "class"
+local searchMode = "class"
+
 -- You can add zones to search here. Just follow syntax "" and , comma
 local zones = { "Dalaran", "The Ruby Sanctum" }
+
+-- You can add classes to search here. Just follow syntax "" and , comma
+local classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
 local loopInterval = 180 
@@ -18,6 +24,7 @@ local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
+local currentClass = 1
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
@@ -113,6 +120,9 @@ local function GINVITER_Command(args)
     end
 end
 
+function GINVITER_OnLoad()
+end
+
 function GINVITER_StartSearch()
     if (CanGuildInvite() == false) then
         errorText:SetText("You can't invite at the moment.")
@@ -150,15 +160,25 @@ function GINVITER_SendSearch()
     SetWhoToUI(1)
     FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
 
-    -- Get the next zone to search
-    local zone = zones[currentZone]
-    currentZone = currentZone + 1
-    if (currentZone > #zones) then
-        currentZone = 1
+    local whoString = ""
+    if (searchMode == "zone") then
+        local zone = zones[currentZone]
+        currentZone = currentZone + 1
+        if (currentZone > #zones) then
+            currentZone = 1
+        end
+        whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
+        statusText:SetText("Searching in\n" .. zone)
+    elseif (searchMode == "class") then
+        local class = classes[currentClass]
+        currentClass = currentClass + 1
+        if (currentClass > #classes) then
+            currentClass = 1
+        end
+        whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
+        statusText:SetText("Searching for\n" .. class)
     end
-
-    local whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
-    statusText:SetText("Searching in\n" .. zone)
+    
     lastSearchTime = time()
     SendWho(whoString)
 end
@@ -182,6 +202,7 @@ end
 frame:SetScript("OnUpdate", GINVITER_OnUpdate)
 frame:RegisterEvent("WHO_LIST_UPDATE")
 frame:SetScript("OnEvent", GINVITER_OnEvent)
+frame:SetScript("OnLoad", GINVITER_OnLoad)
 SLASH_GINVITER1 = "/GINVITER"
 SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
@@ -194,3 +215,5 @@ end
 function GINVITER_HideFrame()
     frame:Hide()
 end
+
+print("|cff00ff00GInviter loaded.|r Type /ginviter show for UI. Check ginviter.lua file to change settings. Check GInviter in GitHub for updates.")
