@@ -2,7 +2,7 @@
 
 GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrath of the Lich King)**. It automates the guild recruitment process by searching for potential members based on specified zones and inviting them to join your guild. With GInviter, you can save time and effortlessly attract suitable players to enhance your guild's roster.
 
-![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/f8d7b2b5-8aa7-44dc-98af-87b68cb07d90)
+![Screenshot](https://github.com/nelbin4/GINVITER/assets/20941975/f8d7b2b5-8aa7-44dc-98af-87b68cb07d90)
 
 ## Features
 
@@ -31,7 +31,9 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 
 To modify the addon's behavior, you can edit the Lua file (`GInviter.lua`) located in the addon's folder. Here are some variables you can change:
 
+- `searchMode`: Choose the search mode for guild member search. Options include "zone" for zone-based search, "class" for class-based search, or "both" for combined zone and class search.
 - `zones`: Add or remove zones to search by following the syntax and comma-separated format.
+- `classes`: Add or remove classes to search by following the syntax and comma-separated format.
 - `loopInterval`: Adjust the loop interval in seconds for repeated searches.
 - `level`: Change the level requirement for potential guild members.
 - `maxInvites`: Define the maximum number of invites per player before excluding them.
