@@ -27,6 +27,17 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 4. Monitor the progress in the GInviter frame.
 5. Click the **Stop** button to end the search process.
 
+## Modifying Variables
+
+To modify the addon's behavior, you can edit the Lua file (`GInviter.lua`) located in the addon's folder. Here are some variables you can change:
+
+- `zones`: Add or remove zones to search by following the syntax and comma-separated format.
+- `loopInterval`: Adjust the loop interval in seconds for repeated searches.
+- `level`: Change the level requirement for potential guild members.
+- `maxInvites`: Define the maximum number of invites per player before excluding them.
+
+Remember to save the changes and restart World of Warcraft for the modifications to take effect.
+
 ## Contributing
 
 Contributions, bug reports, and feature suggestions are welcome! Feel free to contribute to the project by opening an issue or submitting a pull request on the [GitHub repository](https://github.com/nelbin4/ginviter).
