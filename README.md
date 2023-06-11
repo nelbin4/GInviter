@@ -1,42 +1,44 @@
-# GINVITER Addon
+# GInviter
 
-## Description
-GINVITER is a World of Warcraft addon that automatically invites players without a guild in specific zones to join your guild. It helps guild recruiters easily invite potential members while they explore the world. This is tested in WoW Client 3.3.5a (Wrath of the Lich King)
+GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrath of the Lich King)**. It automates the guild recruitment process by searching for potential members based on specific criteria and inviting them to join your guild. With GInviter, you can save time and effortlessly attract suitable players to enhance your guild's roster.
 
-![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/fb802ec0-501a-4d9d-9e88-21e699391166)
-
+![Untitled](https://github.com/nelbin4/GINVITER/assets/20941975/f8d7b2b5-8aa7-44dc-98af-87b68cb07d90)
 
 ## Features
-- Automatically invites players without a guild in specified zones.
-- Limits guild invites to a maximum of two per person to avoid spam or annoy players.
-- Customizable list of zones to search for potential recruits.
-- User-friendly UI with start/stop buttons and status display.
-- Slash commands to show/hide the addon UI.
+
+- **Effortless Guild Recruitment**: Automate the search for potential guild members based on your criteria.
+- **Customizable Criteria**: Set level requirements and target specific zones for tailored recruitment.
+- **Sleek Interface**: Enjoy a visually appealing design with a maroon background and white text.
+- **Controlled Invitations**: Define maximum invites per player to ensure fair recruitment practices.
+- **Exclusion Management**: Automatically exclude players who have reached the maximum invite limit.
+- **Stability and Performance**: Built to deliver a smooth and reliable experience.
 
 ## Installation
-1. Download the latest version of the addon from the [Releases](https://github.com/nelbin4/GINVITER/releases) page.
-2. Extract the contents of the downloaded ZIP file.
-3. Copy the extracted "GINVITER" folder to your World of Warcraft\Interface\AddOns directory.
+
+1. Download the latest release of GInviter from the [GitHub repository](https://github.com/nelbin4/ginviter/releases).
+2. Extract the downloaded file into your World of Warcraft `Interface/AddOns` directory.
+3. Launch World of Warcraft and enable GInviter in the AddOns menu.
 
 ## Usage
-- Type `/GINVITER show` to show the addon's UI.
-- Click the "Start" button to begin searching for potential recruits in the specified zones.
-- Click the "Stop" button to stop the search.
-- Type `/GINVITER hide` to hide the addon's UI.
 
-## Configuration
-The addon can be configured by modifying the Lua file directly. Open the "GINVITER.lua" file in a text editor and make the desired changes. You can customize the following settings:
+1. Open GInviter by typing `/ginviter` or `/ginviter show` in the chat.
+2. Set your desired criteria for guild member search.
+3. Click the **Start** button to initiate the search and invitation process.
+4. Monitor the progress in the GInviter frame.
+5. Click the **Stop** button to end the search process.
 
-- **Zones**: Add or remove zones from the `zones` table to specify which zones to search for potential recruits.
-- **Loop Interval**: Adjust the `loopInterval` variable to set the interval (in seconds) between each search loop.
-- **Level**: Set the `level` variable to the desired level range of players to invite.
+## Contributing
 
-## Contributions
-Contributions to the GINVITER addon are welcome! If you encounter any issues, have suggestions for improvements, or would like to contribute code, feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/nelbin4/GINVITER).
+Contributions, bug reports, and feature suggestions are welcome! Feel free to contribute to the project by opening an issue or submitting a pull request on the [GitHub repository](https://github.com/nelbin4/ginviter).
 
 ## License
-This addon is distributed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to modify and distribute the code as per the terms of the license.
 
-## Credits
-GINVITER was developed by Your Name. Special thanks to the WoW community for their support and feedback.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
+## Disclaimer
+
+GInviter is not associated with or endorsed by Blizzard Entertainment. Use it at your own risk.
+
+## Contact
+
+For any inquiries or questions, please contact [nelbin4](https://github.com/nelbin4).
