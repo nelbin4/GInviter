@@ -7,7 +7,7 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 ## Features
 
 - **Effortless Guild Recruitment**: Automate the search for potential guild members based on your criteria.
-- **Sleek Interface**: Enjoy a visually appealing design with a maroon background and white text.
+- **Sleek Interface**: Enjoy a visually appealing design, easy to use user interfac.
 - **Search by Zone and Class**: Find suitable players based on specific zones and classes.
 - **Controlled Invitations**: Define maximum invites per player to ensure fair recruitment practices.
 - **Exclusion Management**: Automatically exclude players who have reached the maximum invite limit.
