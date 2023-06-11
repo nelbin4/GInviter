@@ -32,7 +32,7 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 
 To modify the addon's behavior, you can edit the Lua file (`GInviter.lua`) located in the addon's folder. Here are some variables you can change:
 
-- `searchMode`: Choose the search mode for guild member search. Options include "zone" for zone-based search, "class" for class-based search, or "both" for combined zone and class search.
+- `searchMode`: Choose the search mode for guild invites. Options include "zone" for zone-based search and, "class" for class-based search.
 - `zones`: Add or remove zones to search by following the syntax and comma-separated format.
 - `classes`: Add or remove classes to search by following the syntax and comma-separated format.
 - `loopInterval`: Adjust the loop interval in seconds for repeated searches.
