@@ -25,6 +25,7 @@ local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
 local currentClass = 1
+local excludeList = {}
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
@@ -65,7 +66,7 @@ hideButton:SetSize(25, 25)
 hideButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
 hideButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-HideButton-Up")
 hideButton:SetHighlightTexture("Interface\\Buttons\\UI-Panel-HideButton-Highlight")
-hideButton:SetScript("OnClick", function() GINVITER_HideFrame() end)
+hideButton:SetScript("OnClick", function() GINVITER_ToggleFrame() end)
 
 local statusText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 statusText:SetPoint("TOP", titleBar, "BOTTOM", 0, -10)
@@ -99,7 +100,20 @@ stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
-local excludeList = {}
+local function GINVITER_ToggleFrame()
+    if frame:IsVisible() then
+        frame:Hide()
+    else
+        frame:Show()
+    end
+end
+
+-- Hook the frame's OnHide event to prevent it from stopping the addon's functionality
+frame:SetScript("OnHide", function(self)
+    if not InCombatLockdown() then
+        GINVITER_ToggleFrame()
+    end
+end)
 
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
@@ -208,13 +222,4 @@ SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
 
-function GINVITER_ShowFrame()
-    frame:Show()
-    GINVITER_StartSearch() -- Start the search when the frame is shown
-end
-
-function GINVITER_HideFrame()
-    frame:Hide()
-end
-
-print("|cff00ff00GInviter loaded.|r Use /ginviter show. Modify file ginviter.lua inside addon folder to your preference. Check github.com/nelbin4/ginviter for updates.")
+print("|cff00ff00GInviter loaded.|r Use /ginviter show. Edit the Lua file (GInviter.lua) located in the addon's folder. Github.com/nelbin4/ginviter")
