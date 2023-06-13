@@ -59,13 +59,13 @@ titleText:SetPoint("CENTER", titleBar, "CENTER")
 titleText:SetText("GInviter") -- Set the title text
 titleText:SetTextColor(1, 1, 1) -- White text color
 
--- Create the minimize button
+-- Create the close/minimize button
 local minimizeButton = CreateFrame("Button", nil, frame)
 minimizeButton:SetSize(25, 25)
 minimizeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
 minimizeButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
 minimizeButton:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight")
-minimizeButton:SetScript("OnClick", ToggleMinimizedMode)
+minimizeButton:SetScript("OnClick", function() frame:Hide() end)
 
 local statusText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 statusText:SetPoint("TOP", titleBar, "BOTTOM", 0, -10)
@@ -111,9 +111,9 @@ end
 
 local function GINVITER_Command(args)
     if (args == "show") then
-        GINVITER_ShowFrame()
+        frame:Show()
     elseif (args == "hide") then
-        GINVITER_HideFrame()
+        frame:Hide()
     else
         statusText:SetText("GINVITER")
         ChatFrame1:AddMessage("Usage: /GINVITER [show/hide]")
@@ -214,14 +214,5 @@ SLASH_GINVITER1 = "/GINVITER"
 SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
-
-function GINVITER_ShowFrame()
-    frame:Show()
-    GINVITER_StartSearch() -- Start the search when the frame is shown
-end
-
-function GINVITER_HideFrame()
-    frame:Hide()
-end
 
 print("|cff00ff00GInviter loaded.|r Use /ginviter show. Modify file ginviter.lua inside addon folder to your preference. Check github.com/nelbin4/ginviter for updates.")
