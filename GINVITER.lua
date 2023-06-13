@@ -123,14 +123,15 @@ function GINVITER_OnLoad()
 end
 
 function GINVITER_StartSearch()
-    if (CanGuildInvite() == false) then
-        errorText:SetText("We don't have /ginvite privileges. Ask Guild Master or Officer.")
-        return
+    if CanGuildInvite() then
+	    statusText:SetText("Searching")
+		searching = true
+		lastSearchTime = time()
+		GINVITER_SendSearch()
+	else
+		GINVITER_StopSearch()
+        print("We don't have /ginvite privileges. Ask Guild Master or Officer.")
     end
-    statusText:SetText("Searching")
-    searching = true
-    lastSearchTime = time()
-    GINVITER_SendSearch()
 end
 
 function GINVITER_StopSearch()
@@ -139,14 +140,14 @@ function GINVITER_StopSearch()
 end
 
 function GINVITER_OnUpdate(args)
-    if (searching == true) then
-        timeLeft = lastSearchTime + loopInterval - time()
-        if (timeLeft < 0) then
-            if (CanGuildInvite() == false) then
-                GINVITER_StopSearch()
-                errorText:SetText("We don't have /ginvite privileges. Ask Guild Master or Officer.")
-            else
+    if searching then
+        local timeLeft = lastSearchTime + loopInterval - time()
+        if timeLeft < 0 then
+            if CanGuildInvite() then
                 GINVITER_SendSearch()
+            else
+                GINVITER_StopSearch()
+                print("We don't have /ginvite privileges. Ask the Guild Master or an Officer.")
             end
         else
             timeValue:SetText(string.format("%.0f", timeLeft))
@@ -154,6 +155,7 @@ function GINVITER_OnUpdate(args)
         end
     end
 end
+
 
 -- Function to send the search query
 function GINVITER_SendSearch()
