@@ -25,7 +25,6 @@ local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
 local currentClass = 1
-local excludeList = {}
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
@@ -60,13 +59,13 @@ titleText:SetPoint("CENTER", titleBar, "CENTER")
 titleText:SetText("GInviter") -- Set the title text
 titleText:SetTextColor(1, 1, 1) -- White text color
 
--- Create the hide button
-local hideButton = CreateFrame("Button", nil, frame)
-hideButton:SetSize(25, 25)
-hideButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
-hideButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-HideButton-Up")
-hideButton:SetHighlightTexture("Interface\\Buttons\\UI-Panel-HideButton-Highlight")
-hideButton:SetScript("OnClick", function() GINVITER_ToggleFrame() end)
+-- Create the minimize button
+local minimizeButton = CreateFrame("Button", nil, frame)
+minimizeButton:SetSize(25, 25)
+minimizeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
+minimizeButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
+minimizeButton:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight")
+minimizeButton:SetScript("OnClick", ToggleMinimizedMode)
 
 local statusText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 statusText:SetPoint("TOP", titleBar, "BOTTOM", 0, -10)
@@ -100,20 +99,7 @@ stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
-local function GINVITER_ToggleFrame()
-    if frame:IsVisible() then
-        frame:Hide()
-    else
-        frame:Show()
-    end
-end
-
--- Hook the frame's OnHide event to prevent it from stopping the addon's functionality
-frame:SetScript("OnHide", function(self)
-    if not InCombatLockdown() then
-        GINVITER_ToggleFrame()
-    end
-end)
+local excludeList = {}
 
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
@@ -170,29 +156,36 @@ function GINVITER_OnUpdate(args)
     end
 end
 
+-- Function to send the search query
 function GINVITER_SendSearch()
     SetWhoToUI(1)
     FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
 
     local whoString = ""
     if (searchMode == "zone") then
-        local zone = zones[currentZone]
-        currentZone = currentZone + 1
-        if (currentZone > #zones) then
-            currentZone = 1
+        if #zones == 0 then
+            print("All zones have been searched.")
+            return
         end
+
+        local zoneIndex = math.random(1, #zones) -- Randomly select a zone index
+        local zone = zones[zoneIndex]
+        table.remove(zones, zoneIndex) -- Remove the selected zone from the list
         whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
         statusText:SetText("Searching in\n" .. zone)
     elseif (searchMode == "class") then
-        local class = classes[currentClass]
-        currentClass = currentClass + 1
-        if (currentClass > #classes) then
-            currentClass = 1
+        if #classes == 0 then
+            print("All classes have been searched.")
+            return
         end
+
+        local classIndex = math.random(1, #classes) -- Randomly select a class index
+        local class = classes[classIndex]
+        table.remove(classes, classIndex) -- Remove the selected class from the list
         whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
         statusText:SetText("Searching for\n" .. class)
     end
-    
+
     lastSearchTime = time()
     SendWho(whoString)
 end
@@ -222,4 +215,13 @@ SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
 
-print("|cff00ff00GInviter loaded.|r Use /ginviter show. Edit the Lua file (GInviter.lua) located in the addon's folder. Github.com/nelbin4/ginviter")
+function GINVITER_ShowFrame()
+    frame:Show()
+    GINVITER_StartSearch() -- Start the search when the frame is shown
+end
+
+function GINVITER_HideFrame()
+    frame:Hide()
+end
+
+print("|cff00ff00GInviter loaded.|r Use /ginviter show. Modify file ginviter.lua inside addon folder to your preference. Check github.com/nelbin4/ginviter for updates.")
