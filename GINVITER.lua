@@ -125,7 +125,7 @@ end
 
 function GINVITER_StartSearch()
     if (CanGuildInvite() == false) then
-        errorText:SetText("You can't invite at the moment.")
+        errorText:SetText("We don't have /ginvite privileges. Ask Guild Master or Officer.")
         return
     end
     statusText:SetText("Searching")
@@ -145,7 +145,7 @@ function GINVITER_OnUpdate(args)
         if (timeLeft < 0) then
             if (CanGuildInvite() == false) then
                 GINVITER_StopSearch()
-                errorText:SetText("You can't invite anymore, stopping.")
+                errorText:SetText("We don't have /ginvite privileges. Ask Guild Master or Officer.")
             else
                 GINVITER_SendSearch()
             end
