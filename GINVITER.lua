@@ -215,4 +215,4 @@ SlashCmdList["GINVITER"] = GINVITER_Command
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
 
-print("|cff00ff00GInviter loaded.|r Use /ginviter show. Modify file ginviter.lua inside addon folder to your preference. Check github.com/nelbin4/ginviter for updates.")
+print("|cff00ff00GInviter loaded.|r Use /GINVITER. Modify file ginviter.lua inside addon folder. Check github.com/nelbin4/ginviter for updates.")
