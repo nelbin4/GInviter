@@ -208,12 +208,12 @@ function GINVITER_InviteWhoResults()
 end
 
 frame:SetScript("OnUpdate", GINVITER_OnUpdate)
-frame:RegisterEvent("WHO_LIST_UPDATE")
 frame:SetScript("OnEvent", GINVITER_OnEvent)
 frame:SetScript("OnLoad", GINVITER_OnLoad)
-SLASH_GINVITER1 = "/GINVITER"
-SlashCmdList["GINVITER"] = GINVITER_Command
+frame:RegisterEvent("WHO_LIST_UPDATE")
 frame:SetFrameStrata("LOW")
 frame:SetClampedToScreen(true)
+SLASH_GINVITER1 = "/GINVITER"
+SlashCmdList["GINVITER"] = GINVITER_Command
 
 print("|cff00ff00GInviter loaded.|r Use /GINVITER. Modify file ginviter.lua inside addon folder. Check github.com/nelbin4/ginviter for updates.")
