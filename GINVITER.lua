@@ -115,7 +115,6 @@ local function GINVITER_Command(args)
     elseif (args == "hide") then
         frame:Hide()
     else
-        statusText:SetText("GINVITER")
         ChatFrame1:AddMessage("Usage: /GINVITER [show/hide]")
     end
 end
