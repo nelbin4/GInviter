@@ -1,30 +1,32 @@
--- ##########################################################
-
 -- Search mode "zone" or "class"
 local searchMode = "class"
 
--- You can add zones to search here. Just follow syntax "" and , comma
+-- Add or remove zones to search here
 local zones = { "Dalaran", "The Ruby Sanctum" }
 
--- You can add classes to search here. Just follow syntax "" and , comma
+-- Add your desired zones to be exclude
+local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron" }  
+
+-- Add or remove classes to search here
 local classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
-local loopInterval = 180 
+local loopInterval = 60 
 
 -- What level to search
-local level = 80 
+local level = 80
 
 -- Maximum number of invites before excluding a player
 local maxInvites = 2
 
--- ##########################################################
+
 
 local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
 local currentClass = 1
+local excludeList = {}
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
@@ -41,7 +43,6 @@ frame:SetBackdrop({
     insets = { left = 4, right = 4, top = 4, bottom = 4 },
 })
 
--- Create the title bar frame
 local titleBar = CreateFrame("Frame", nil, frame)
 titleBar:SetSize(frame:GetWidth(), 25)
 titleBar:SetPoint("TOP", 0, 0)
@@ -51,15 +52,13 @@ titleBar:SetBackdrop({
     edgeSize = 16,
     insets = { left = 4, right = 4, top = 4, bottom = 4 },
 })
-titleBar:SetBackdropColor(0.5, 0, 0.1, 1) -- Maroon background color
+titleBar:SetBackdropColor(0.5, 0, 0.1, 1)
 
--- Create the title text
 local titleText = titleBar:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 titleText:SetPoint("CENTER", titleBar, "CENTER")
-titleText:SetText("GInviter") -- Set the title text
-titleText:SetTextColor(1, 1, 1) -- White text color
+titleText:SetText("GInviter")
+titleText:SetTextColor(1, 1, 1)
 
--- Create the close/minimize button
 local minimizeButton = CreateFrame("Button", nil, frame)
 minimizeButton:SetSize(25, 25)
 minimizeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
@@ -99,8 +98,6 @@ stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
-local excludeList = {}
-
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
 end
@@ -119,24 +116,64 @@ local function GINVITER_Command(args)
     end
 end
 
-function GINVITER_OnLoad()
-end
-
 function GINVITER_StartSearch()
     if CanGuildInvite() then
-	    statusText:SetText("Searching")
-		searching = true
-		lastSearchTime = time()
-		GINVITER_SendSearch()
-	else
-		GINVITER_StopSearch()
-        print("We don't have /ginvite privileges. Ask Guild Master or Officer.")
+        statusText:SetText("Searching")
+        searching = true
+        lastSearchTime = time()
+        GINVITER_SendSearch()
+    else
+        GINVITER_StopSearch()
+        print("We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
+-- Reset variables and tables to their initial values when stopped
 function GINVITER_StopSearch()
     searching = false
-    statusText:SetText("Stopped")
+    lastSearchTime = 0
+    timeLeft = 0
+    currentZone = 1
+    currentClass = 1
+    excludeList = {}
+    zones = { "Dalaran", "The Ruby Sanctum" }
+    classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
+end
+
+-- Function to send the search query
+function GINVITER_SendSearch()
+    SetWhoToUI(1)
+    FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
+
+    local whoString = ""
+    if (searchMode == "zone") then
+        if #zones == 0 then
+            print("GInviter: All zones have been searched, Searching will stop.")
+			GINVITER_StopSearch()
+            return
+        end
+
+        local zoneIndex = math.random(1, #zones) -- Randomly select a zone index
+        local zone = zones[zoneIndex]
+        table.remove(zones, zoneIndex) -- Remove the selected zone from the list
+        whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
+        statusText:SetText("Searching in\n" .. zone)
+    elseif (searchMode == "class") then
+        if #classes == 0 then
+            print("GInviter: All classes have been searched, Searching will stop.")
+			GINVITER_StopSearch()
+            return
+        end
+
+        local classIndex = math.random(1, #classes) -- Randomly select a class index
+        local class = classes[classIndex]
+        table.remove(classes, classIndex) -- Remove the selected class from the list
+        whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
+        statusText:SetText("Searching for\n" .. class)
+    end
+
+    lastSearchTime = time()
+    SendWho(whoString)
 end
 
 function GINVITER_OnUpdate(args)
@@ -156,55 +193,34 @@ function GINVITER_OnUpdate(args)
     end
 end
 
-
--- Function to send the search query
-function GINVITER_SendSearch()
-    SetWhoToUI(1)
-    FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
-
-    local whoString = ""
-    if (searchMode == "zone") then
-        if #zones == 0 then
-            print("All zones have been searched.")
-            return
-        end
-
-        local zoneIndex = math.random(1, #zones) -- Randomly select a zone index
-        local zone = zones[zoneIndex]
-        table.remove(zones, zoneIndex) -- Remove the selected zone from the list
-        whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
-        statusText:SetText("Searching in\n" .. zone)
-    elseif (searchMode == "class") then
-        if #classes == 0 then
-            print("All classes have been searched.")
-            return
-        end
-
-        local classIndex = math.random(1, #classes) -- Randomly select a class index
-        local class = classes[classIndex]
-        table.remove(classes, classIndex) -- Remove the selected class from the list
-        whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
-        statusText:SetText("Searching for\n" .. class)
-    end
-
-    lastSearchTime = time()
-    SendWho(whoString)
-end
-
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
     GINVITER_InviteWhoResults()
 end
 
+function GINVITER_OnLoad()
+end
+
 function GINVITER_InviteWhoResults()
     local numWhos = GetNumWhoResults()
+
     for index = 1, numWhos, 1 do
         local charname, guildname, level, race, class, zone, classFileName = GetWhoInfo(index)
-        if (guildname == "" and zone ~= "Dalaran Arena" and not GINVITER_IsExcluded(charname)) then
+        
+        if (guildname == "" and not GINVITER_IsExcluded(charname) and not IsZoneExcluded(zone)) then
             GINVITER_AddToExcludeList(charname)
             GuildInvite(charname)
         end
     end
+end
+
+function IsZoneExcluded(zone)
+    for _, excludedZone in ipairs(excludedZones) do
+        if zone == excludedZone then
+            return true
+        end
+    end
+    return false
 end
 
 frame:SetScript("OnUpdate", GINVITER_OnUpdate)
