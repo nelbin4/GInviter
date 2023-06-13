@@ -135,7 +135,6 @@ function GINVITER_StopSearch()
     timeLeft = 0
     currentZone = 1
     currentClass = 1
-    excludeList = {}
     zones = { "Dalaran", "The Ruby Sanctum" }
     classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 end
