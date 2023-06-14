@@ -1,5 +1,5 @@
 -- Search mode "zone" or "class"
-local SearchMode = "zone"
+local SearchMode = "class"
 
 -- Add or remove zones to search here
 local SearchZone = { "Dalaran", "The Ruby Sanctum" }
@@ -8,7 +8,7 @@ local SearchZone = { "Dalaran", "The Ruby Sanctum" }
 local SearchClass = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
-local loopInterval = 60
+local loopInterval = 90
 
 -- What level to search
 local level = 80
