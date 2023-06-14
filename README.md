@@ -13,7 +13,6 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 - **Exclusion Management**: Automatically exclude players who have reached the maximum invite limit.
 - **Stability and Performance**: Built to deliver a smooth and reliable experience.
 
-
 ## Installation
 
 1. Download the latest release of GInviter from the [GitHub repository](https://github.com/nelbin4/ginviter/releases).
@@ -32,9 +31,9 @@ GInviter is a powerful World of Warcraft addon designed for **patch 3.3.5a (Wrat
 
 To modify the addon's behavior, you can edit the Lua file (`GInviter.lua`) located in the addon's folder. Here are some variables you can change:
 
-- `searchMode`: Choose the search mode for guild invites. Options are "zone" for zone-based search and, "class" for class-based search.
-- `zones`: Add or remove zones to search by following the syntax and comma-separated format.
-- `classes`: Add or remove classes to search by following the syntax and comma-separated format.
+- `searchMode`: Choose the search mode for guild invites. Options are "zone" for zone-based search and "class" for class-based search.
+- `searchZone`: Add or remove zones to search by modifying this variable. Follow the syntax and use a comma-separated format.
+- `searchClass`: Add or remove classes to search by modifying this variable. Follow the syntax and use a comma-separated format.
 - `loopInterval`: Adjust the loop interval in seconds for repeated searches.
 - `level`: Change the level requirement for potential guild members.
 - `maxInvites`: Define the maximum number of invites per player before excluding them.
