@@ -1,17 +1,14 @@
 -- Search mode "zone" or "class"
-local searchMode = "class"
+local SearchMode = "zone"
 
 -- Add or remove zones to search here
-local zones = { "Dalaran", "The Ruby Sanctum" }
-
--- Add your desired zones to be exclude
-local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron" }  
+local SearchZone = { "Dalaran", "The Ruby Sanctum" }
 
 -- Add or remove classes to search here
-local classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
+local SearchClass = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
-local loopInterval = 60 
+local loopInterval = 60
 
 -- What level to search
 local level = 80
@@ -19,8 +16,13 @@ local level = 80
 -- Maximum number of invites before excluding a player
 local maxInvites = 2
 
+-- Add your desired zones to be excluded
+local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron" }
 
 
+
+local initialSearchZone = { unpack(SearchZone) }
+local initialSearchClass = { unpack(SearchClass) }
 local searching = false
 local lastSearchTime = 0
 local timeLeft = 0
@@ -96,7 +98,7 @@ local stopButton = CreateFrame("Button", "GINVITERStopButton", frame, "UIPanelBu
 stopButton:SetSize(60, 20)
 stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
-stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
+stopButton:SetScript("OnClick", function() GINVITER_StopSearch(); GINVITER_StopSearch() end)
 
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
@@ -118,25 +120,60 @@ end
 
 function GINVITER_StartSearch()
     if CanGuildInvite() then
+        local initialSearchZone = table.clone(SearchZone)
+        local initialSearchClass = table.clone(SearchClass)
         statusText:SetText("Searching")
         searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
+        timeLeft = 0
+        currentZone = 1
+        currentClass = 1
     else
         GINVITER_StopSearch()
         print("We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
--- Reset variables and tables to their initial values when stopped
+-- Function to stop the search
 function GINVITER_StopSearch()
     searching = false
-    lastSearchTime = 0
-    timeLeft = 0
-    currentZone = 1
-    currentClass = 1
-    zones = { "Dalaran", "The Ruby Sanctum" }
-    classes = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
+    statusText:SetText("Stopped")
+end
+
+-- Function to restart the search
+function GINVITER_RestartSearch()
+    if CanGuildInvite() then
+        excludeList = {}
+		searching = true
+        lastSearchTime = time()
+        GINVITER_SendSearch()
+        timeLeft = 0
+        currentZone = 1
+        currentClass = 1
+		print("GInviter: Restarting..")
+    else
+        GINVITER_StopSearch()
+        print("We are not in a guild. Join a guild to use GInviter.")
+    end
+end
+
+-- Table Cloning for Restart purposes
+function table.clone(...)
+    local clones = {...}
+    local result = {}
+    
+    for i, clone in ipairs(clones) do
+        for key, value in pairs(clone) do
+            if type(value) == "table" then
+                result[key] = table.clone(value) -- Recursively clone nested tables
+            else
+                result[key] = value
+            end
+        end
+    end
+    
+    return result
 end
 
 -- Function to send the search query
@@ -145,37 +182,42 @@ function GINVITER_SendSearch()
     FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
 
     local whoString = ""
-    if (searchMode == "zone") then
-        if #zones == 0 then
-            print("GInviter: All zones have been searched, Searching will stop.")
-			GINVITER_StopSearch()
+    if (SearchMode == "zone") then
+        if #SearchZone == 0 then
+            GINVITER_StopSearch()
             return
         end
 
-        local zoneIndex = math.random(1, #zones) -- Randomly select a zone index
-        local zone = zones[zoneIndex]
-        table.remove(zones, zoneIndex) -- Remove the selected zone from the list
+        local zoneIndex = math.random(1, #SearchZone) -- Randomly select a zone index
+        local zone = SearchZone[zoneIndex]
+        table.remove(SearchZone, zoneIndex) -- Remove the selected zone from the list
         whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
         statusText:SetText("Searching in\n" .. zone)
-    elseif (searchMode == "class") then
-        if #classes == 0 then
-            print("GInviter: All classes have been searched, Searching will stop.")
-			GINVITER_StopSearch()
+    elseif (SearchMode == "class") then
+        if #SearchClass == 0 then
+            GINVITER_StopSearch()
             return
         end
 
-        local classIndex = math.random(1, #classes) -- Randomly select a class index
-        local class = classes[classIndex]
-        table.remove(classes, classIndex) -- Remove the selected class from the list
+        local classIndex = math.random(1, #SearchClass) -- Randomly select a class index
+        local class = SearchClass[classIndex]
+        table.remove(SearchClass, classIndex) -- Remove the selected class from the list
         whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
         statusText:SetText("Searching for\n" .. class)
     end
 
     lastSearchTime = time()
     SendWho(whoString)
+
+    -- Check if the search has completed for both modes and restart the search
+    if not searching and (#SearchZone == 0 or #SearchClass == 0) then
+        GINVITER_RestartSearch()
+    end
 end
 
-function GINVITER_OnUpdate(args)
+
+-- Function to handle the update
+local function GINVITER_OnUpdate(args)
     if searching then
         local timeLeft = lastSearchTime + loopInterval - time()
         if timeLeft < 0 then
@@ -190,7 +232,23 @@ function GINVITER_OnUpdate(args)
             errorText:SetText("")
         end
     end
+
+    -- Check if the search has completed for both modes and restart the search
+    if not searching and (#SearchZone == 0 or #SearchClass == 0) then
+        if #SearchZone == 0 then
+            SearchZone = table.clone(initialSearchZone) -- Reset SearchZone to initial values
+        end
+        if #SearchClass == 0 then
+            SearchClass = table.clone(initialSearchClass) -- Reset SearchClass to initial values
+        end
+        
+        GINVITER_RestartSearch() -- Restart the search
+    end
 end
+
+
+
+
 
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
