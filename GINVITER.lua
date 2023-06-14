@@ -24,11 +24,13 @@ local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", 
 local initialSearchZone = { unpack(SearchZone) }
 local initialSearchClass = { unpack(SearchClass) }
 local searching = false
+local searchStarted = false
 local lastSearchTime = 0
 local timeLeft = 0
 local currentZone = 1
 local currentClass = 1
 local excludeList = {}
+
 
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
@@ -92,13 +94,24 @@ local startButton = CreateFrame("Button", "GINVITERStartButton", frame, "UIPanel
 startButton:SetSize(60, 20)
 startButton:SetPoint("BOTTOMLEFT", 10, 10)
 startButton:SetText("Start")
+if searchStarted then
+    startButton:Disable()
+else
+    startButton:Enable()
+end
 startButton:SetScript("OnClick", function() GINVITER_StartSearch() end)
 
 local stopButton = CreateFrame("Button", "GINVITERStopButton", frame, "UIPanelButtonTemplate")
 stopButton:SetSize(60, 20)
 stopButton:SetPoint("BOTTOMLEFT", startButton, "BOTTOMRIGHT", 5, 0)
 stopButton:SetText("Stop")
+if not searchStarted then
+    stopButton:Disable()
+else
+    stopButton:Enable()
+end
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch(); GINVITER_StopSearch() end)
+
 
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
@@ -129,17 +142,23 @@ function GINVITER_StartSearch()
         timeLeft = 0
         currentZone = 1
         currentClass = 1
+        startButton:Disable()  -- Disable the Start button
+        stopButton:Enable()  -- Enable the Stop button
     else
         GINVITER_StopSearch()
         print("We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
+
 -- Function to stop the search
 function GINVITER_StopSearch()
     searching = false
     statusText:SetText("Stopped")
+    startButton:Enable()  -- Enable the Start button
+    stopButton:Disable()  -- Disable the Stop button
 end
+
 
 -- Function to restart the search
 function GINVITER_RestartSearch()
@@ -205,14 +224,8 @@ function GINVITER_SendSearch()
         whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
         statusText:SetText("Searching for\n" .. class)
     end
-
     lastSearchTime = time()
     SendWho(whoString)
-
-    -- Check if the search has completed for both modes and restart the search
-    if not searching and (#SearchZone == 0 or #SearchClass == 0) then
-        GINVITER_RestartSearch()
-    end
 end
 
 -- Function to handle the update
