@@ -19,7 +19,7 @@ local maxInvites = 2
 -- Add your desired zones to be excluded
 local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron" }
 
-
+-- ###########################################################
 
 local initialSearchZone = { unpack(SearchZone) }
 local initialSearchClass = { unpack(SearchClass) }
@@ -215,7 +215,6 @@ function GINVITER_SendSearch()
     end
 end
 
-
 -- Function to handle the update
 local function GINVITER_OnUpdate(args)
     if searching then
@@ -245,10 +244,6 @@ local function GINVITER_OnUpdate(args)
         GINVITER_RestartSearch() -- Restart the search
     end
 end
-
-
-
-
 
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
