@@ -133,6 +133,10 @@ end
 
 function GINVITER_StartSearch()
     if CanGuildInvite() then
+        if GINVITER_CheckGuildMemberCount() then
+            return -- Stop the search if the guild is full
+        end
+
         local initialSearchZone = table.clone(SearchZone)
         local initialSearchClass = table.clone(SearchClass)
         statusText:SetText("Searching")
@@ -150,34 +154,49 @@ function GINVITER_StartSearch()
     end
 end
 
-
 -- Function to stop the search
 function GINVITER_StopSearch()
     searching = false
     statusText:SetText("Stopped")
+    timeValue:SetText("-")
     startButton:Enable()  -- Enable the Start button
     stopButton:Disable()  -- Disable the Stop button
+    -- Reset necessary variables
+    timeLeft = 0
+    currentZone = 1
+    currentClass = 1
+    SearchZone = table.clone(initialSearchZone)
+    SearchClass = table.clone(initialSearchClass)
 end
-
 
 -- Function to restart the search
 function GINVITER_RestartSearch()
     if CanGuildInvite() then
-        excludeList = {}
-		searching = true
+        searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
         timeLeft = 0
         currentZone = 1
         currentClass = 1
-		startButton:Disable()  -- Disable the Start button
+        startButton:Disable()  -- Disable the Start button
         stopButton:Enable()  -- Enable the Stop button
-		print("GInviter: Restarting..")
+        print("GInviter: Restarting..")
     else
         GINVITER_StopSearch()
         print("We are not in a guild. Join a guild to use GInviter.")
     end
 end
+
+-- Function to check guild member count
+function GINVITER_CheckGuildMemberCount()
+    if GetNumGuildMembers() >= 1000 then
+        GINVITER_StopSearch()
+        print("Guild Full")
+        return true -- Indicate that the guild is full
+    end
+    return false -- Indicate that the guild is not full
+end
+
 
 -- Table Cloning for Restart purposes
 function table.clone(...)
@@ -235,6 +254,11 @@ local function GINVITER_OnUpdate(args)
     if searching then
         local timeLeft = lastSearchTime + loopInterval - time()
         if timeLeft < 0 then
+            -- Check guild member count
+            if GINVITER_CheckGuildMemberCount() then
+                return -- Stop the search if the guild is full
+            end
+
             if CanGuildInvite() then
                 GINVITER_SendSearch()
             else
@@ -244,14 +268,6 @@ local function GINVITER_OnUpdate(args)
         else
             timeValue:SetText(string.format("%.0f", timeLeft))
             errorText:SetText("")
-        end
-
-        -- Check guild member count
-        if GetNumGuildMembers() >= 1000 then
-            GINVITER_StopSearch()
-            statusText:SetText("Guild Full")
-			timeValue:SetText("-")
-            return
         end
     end
 
@@ -264,9 +280,15 @@ local function GINVITER_OnUpdate(args)
             SearchClass = table.clone(initialSearchClass) -- Reset SearchClass to initial values
         end
         
+        -- Check guild member count
+        if GINVITER_CheckGuildMemberCount() then
+            return -- Stop the search if the guild is full
+        end
+        
         GINVITER_RestartSearch() -- Restart the search
     end
 end
+
 
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
