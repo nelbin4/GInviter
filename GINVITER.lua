@@ -8,7 +8,7 @@ local SearchZone = { "Dalaran", "The Ruby Sanctum" }
 local SearchClass = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
-local loopInterval = 5
+local loopInterval = 90
 
 -- What level to search
 local level = 80
