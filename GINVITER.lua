@@ -8,7 +8,7 @@ local SearchZone = { "Dalaran", "The Ruby Sanctum" }
 local SearchClass = { "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "Druid" }
 
 -- Loop interval in seconds
-local loopInterval = 90
+local loopInterval = 5
 
 -- What level to search
 local level = 80
@@ -110,7 +110,7 @@ if not searchStarted then
 else
     stopButton:Enable()
 end
-stopButton:SetScript("OnClick", function() GINVITER_StopSearch(); GINVITER_StopSearch() end)
+stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
 
 local function GINVITER_AddToExcludeList(playerName)
@@ -244,6 +244,14 @@ local function GINVITER_OnUpdate(args)
         else
             timeValue:SetText(string.format("%.0f", timeLeft))
             errorText:SetText("")
+        end
+
+        -- Check guild member count
+        if GetNumGuildMembers() >= 1000 then
+            GINVITER_StopSearch()
+            statusText:SetText("Guild Full")
+			timeValue:SetText("-")
+            return
         end
     end
 
