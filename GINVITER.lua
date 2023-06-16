@@ -190,11 +190,15 @@ end
 
 -- Function to check guild member count
 function GINVITER_CheckGuildMemberCount()
-    if GetNumGuildMembers(true) >= 1000 then
+    GuildRoster()
+    local numMembers = GetNumGuildMembers(true)
+
+    if numMembers >= 1000 then
         GINVITER_StopSearch()
         print("|cffffff00GInviter:|r Guild Full.")
         return true
     end
+
     return false
 end
 
@@ -218,6 +222,10 @@ end
 
 -- Function to send the search query
 function GINVITER_SendSearch()
+    if GINVITER_CheckGuildMemberCount() then
+        return
+    end
+	
     SetWhoToUI(1)
     FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
 
@@ -255,10 +263,6 @@ end
 -- Function to handle the update
 local function GINVITER_OnUpdate(args)
     if searching then
-        if GINVITER_CheckGuildMemberCount() then
-            return
-        end
-		
         local timeLeft = lastSearchTime + loopInterval - time()
         if timeLeft < 0 then
             if CanGuildInvite() then
