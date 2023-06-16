@@ -222,43 +222,44 @@ function GINVITER_SendSearch()
     FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE")
 
     local whoString = ""
-    if (SearchMode == "zone") then
+    if SearchMode == "zone" then
         if #SearchZone == 0 then
-            GINVITER_StopSearch()
-            return
+            if #SearchClass == 0 then
+                GINVITER_RestartSearch()
+                return
+            end
+            SearchZone = table.clone(initialSearchZone)
         end
-
-        local zoneIndex = math.random(1, #SearchZone) -- Randomly select a zone index
-        local zone = SearchZone[zoneIndex]
-        table.remove(SearchZone, zoneIndex) -- Remove the selected zone from the list
+        local zoneIndex = math.random(1, #SearchZone)
+        local zone = table.remove(SearchZone, zoneIndex)
         whoString = "g-\"\" " .. level .. " z-\"" .. zone .. "\""
         statusText:SetText("Searching in\n" .. zone)
-    elseif (SearchMode == "class") then
+    elseif SearchMode == "class" then
         if #SearchClass == 0 then
-            GINVITER_StopSearch()
-            return
+            if #SearchZone == 0 then
+                GINVITER_RestartSearch()
+                return
+            end
+            SearchClass = table.clone(initialSearchClass)
         end
-
-        local classIndex = math.random(1, #SearchClass) -- Randomly select a class index
-        local class = SearchClass[classIndex]
-        table.remove(SearchClass, classIndex) -- Remove the selected class from the list
+        local classIndex = math.random(1, #SearchClass)
+        local class = table.remove(SearchClass, classIndex)
         whoString = "g-\"\" " .. level .. " c-\"" .. class .. "\""
         statusText:SetText("Searching for\n" .. class)
     end
+
     lastSearchTime = time()
     SendWho(whoString)
 end
 
 -- Function to handle the update
 local function GINVITER_OnUpdate(args)
+    -- Check guild member count
+    GINVITER_CheckGuildMemberCount()
+
     if searching then
         local timeLeft = lastSearchTime + loopInterval - time()
         if timeLeft < 0 then
-            -- Check guild member count
-            if GINVITER_CheckGuildMemberCount() then
-                return -- Stop the search if the guild is full
-            end
-
             if CanGuildInvite() then
                 GINVITER_SendSearch()
             else
@@ -269,23 +270,23 @@ local function GINVITER_OnUpdate(args)
             timeValue:SetText(string.format("%.0f", timeLeft))
             errorText:SetText("")
         end
-    end
+    else
+        -- Check if the search has completed for both modes and restart the search
+        if #SearchZone == 0 or #SearchClass == 0 then
+            -- Reset SearchZone to initial values if all zones have been searched
+            if #SearchZone == 0 then
+                SearchZone = table.clone(initialSearchZone)
+            end
 
-    -- Check if the search has completed for both modes and restart the search
-    if not searching and (#SearchZone == 0 or #SearchClass == 0) then
-        if #SearchZone == 0 then
-            SearchZone = table.clone(initialSearchZone) -- Reset SearchZone to initial values
+            -- Reset SearchClass to initial values if all classes have been searched
+            if #SearchClass == 0 then
+                SearchClass = table.clone(initialSearchClass)
+            end
+
+            if not searching then
+                GINVITER_RestartSearch() -- Restart the search
+            end
         end
-        if #SearchClass == 0 then
-            SearchClass = table.clone(initialSearchClass) -- Reset SearchClass to initial values
-        end
-        
-        -- Check guild member count
-        if GINVITER_CheckGuildMemberCount() then
-            return -- Stop the search if the guild is full
-        end
-        
-        GINVITER_RestartSearch() -- Restart the search
     end
 end
 
