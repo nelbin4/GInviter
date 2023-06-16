@@ -127,25 +127,25 @@ local function GINVITER_Command(args)
     elseif (args == "hide") then
         frame:Hide()
     else
-        ChatFrame1:AddMessage("Usage: /GINVITER [show/hide]")
+        ChatFrame1:AddMessage("Usage: /ginviter [show/hide]")
     end
 end
 
+-- Function to start the search
 function GINVITER_StartSearch()
     if CanGuildInvite() then
-        local initialSearchZone = table.clone(SearchZone)
-        local initialSearchClass = table.clone(SearchClass)
         searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
         timeLeft = 0
         currentZone = 1
         currentClass = 1
-        startButton:Disable()  -- Disable the Start button
-        stopButton:Enable()  -- Enable the Stop button
+        startButton:Disable()
+        stopButton:Enable()
+		print("|cffffff00GInviter:|r Starting..")
     else
         GINVITER_StopSearch()
-        print("|cff800000GInviter: We are not in a guild. Join a guild to use GInviter.")
+        print("|cffffff00GInviter:|r We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
@@ -154,14 +154,14 @@ function GINVITER_StopSearch()
     searching = false
     statusText:SetText("Stopped")
     timeValue:SetText("-")
-    startButton:Enable()  -- Enable the Start button
-    stopButton:Disable()  -- Disable the Stop button
-    -- Reset necessary variables
+    startButton:Enable()
+    stopButton:Disable()
     timeLeft = 0
     currentZone = 1
     currentClass = 1
     SearchZone = table.clone(initialSearchZone)
     SearchClass = table.clone(initialSearchClass)
+	print("|cffffff00GInviter:|r Stopped.")
 end
 
 -- Function to restart the search
@@ -173,12 +173,12 @@ function GINVITER_RestartSearch()
         timeLeft = 0
         currentZone = 1
         currentClass = 1
-        startButton:Disable()  -- Disable the Start button
-        stopButton:Enable()  -- Enable the Stop button
-        print("|cff800000GInviter: Restarting..")
+        startButton:Disable()
+        stopButton:Enable()
+        print("|cffffff00GInviter:|r Restarting..")
     else
         GINVITER_StopSearch()
-        print("|cff800000GInviter: We are not in a guild. Join a guild to use GInviter.")
+        print("|cffffff00GInviter:|r We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
@@ -186,7 +186,7 @@ end
 function GINVITER_CheckGuildMemberCount()
     if GetNumGuildMembers() >= 1000 then
         GINVITER_StopSearch()
-        print("|cff00ff00GInviter: Guild Full.")
+        print("|cffffff00GInviter:|r Guild Full.")
         return true -- Indicate that the guild is full
     end
     return false -- Indicate that the guild is not full
@@ -259,7 +259,7 @@ local function GINVITER_OnUpdate(args)
                 GINVITER_SendSearch()
             else
                 GINVITER_StopSearch()
-                print("|cff800000GInviter: We don't have /ginvite privileges. Ask the Guild Master or an Officer.")
+                print("|cffffff00GInviter:|r We don't have /ginvite privileges. Ask the Guild Master or an Officer.")
             end
         else
             timeValue:SetText(string.format("%.0f", timeLeft))
@@ -292,6 +292,8 @@ function GINVITER_OnEvent(args)
 end
 
 function GINVITER_OnLoad()
+	local initialSearchZone = table.clone(SearchZone)
+	local initialSearchClass = table.clone(SearchClass)
 end
 
 function GINVITER_InviteWhoResults()
@@ -325,4 +327,4 @@ frame:SetClampedToScreen(true)
 SLASH_GINVITER1 = "/GINVITER"
 SlashCmdList["GINVITER"] = GINVITER_Command
 
-print("|cff00ff00GInviter loaded.|r Use /GINVITER. Modify file ginviter.lua inside addon folder. Check github.com/nelbin4/ginviter for updates.")
+print("|cffffff00GInviter:|r Use /GINVITER. Modify file ginviter.lua inside addon folder. Check |cffffff00github.com/nelbin4/ginviter|r for updates.")
