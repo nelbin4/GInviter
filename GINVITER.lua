@@ -135,7 +135,6 @@ function GINVITER_StartSearch()
     if CanGuildInvite() then
         local initialSearchZone = table.clone(SearchZone)
         local initialSearchClass = table.clone(SearchClass)
-        statusText:SetText("Searching")
         searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
