@@ -136,6 +136,10 @@ end
 -- Function to start the search
 function GINVITER_StartSearch()
     if CanGuildInvite() then
+        if GINVITER_CheckGuildMemberCount() then
+            return
+        end
+
         searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
@@ -186,7 +190,7 @@ end
 
 -- Function to check guild member count
 function GINVITER_CheckGuildMemberCount()
-    if GetNumGuildMembers() >= 1000 then
+    if GetNumGuildMembers(true) >= 1000 then
         GINVITER_StopSearch()
         print("|cffffff00GInviter:|r Guild Full.")
         return true
@@ -250,9 +254,11 @@ end
 
 -- Function to handle the update
 local function GINVITER_OnUpdate(args)
-    GINVITER_CheckGuildMemberCount()
-
     if searching then
+        if GINVITER_CheckGuildMemberCount() then
+            return
+        end
+		
         local timeLeft = lastSearchTime + loopInterval - time()
         if timeLeft < 0 then
             if CanGuildInvite() then
@@ -286,6 +292,7 @@ end
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
     GINVITER_InviteWhoResults()
+	GINVITER_CheckGuildMemberCount()
 end
 
 function GINVITER_OnLoad()
