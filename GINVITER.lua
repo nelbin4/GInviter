@@ -150,7 +150,7 @@ function GINVITER_StartSearch()
         stopButton:Enable()  -- Enable the Stop button
     else
         GINVITER_StopSearch()
-        print("GInviter: We are not in a guild. Join a guild to use GInviter.")
+        print("|cff800000GInviter: We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
@@ -180,10 +180,10 @@ function GINVITER_RestartSearch()
         currentClass = 1
         startButton:Disable()  -- Disable the Start button
         stopButton:Enable()  -- Enable the Stop button
-        print("GInviter: Restarting..")
+        print("|cff800000GInviter: Restarting..")
     else
         GINVITER_StopSearch()
-        print("GInviter: We are not in a guild. Join a guild to use GInviter.")
+        print("|cff800000GInviter: We are not in a guild. Join a guild to use GInviter.")
     end
 end
 
@@ -191,7 +191,7 @@ end
 function GINVITER_CheckGuildMemberCount()
     if GetNumGuildMembers() >= 1000 then
         GINVITER_StopSearch()
-        print("GInviter: Guild Full")
+        print("|cff00ff00GInviter: Guild Full.")
         return true -- Indicate that the guild is full
     end
     return false -- Indicate that the guild is not full
@@ -264,7 +264,7 @@ local function GINVITER_OnUpdate(args)
                 GINVITER_SendSearch()
             else
                 GINVITER_StopSearch()
-                print("GInviter: We don't have /ginvite privileges. Ask the Guild Master or an Officer.")
+                print("|cff800000GInviter: We don't have /ginvite privileges. Ask the Guild Master or an Officer.")
             end
         else
             timeValue:SetText(string.format("%.0f", timeLeft))
