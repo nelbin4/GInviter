@@ -1,5 +1,5 @@
 -- Search mode "zone" or "class"
-local SearchMode = "zone"
+local SearchMode = "class"
 
 -- Add or remove zones to search here
 local SearchZone = { "Dalaran", "The Ruby Sanctum" }
@@ -18,8 +18,6 @@ local maxInvites = 2
 
 -- Add your desired zones to be excluded
 local excludedZones = { "Dalaran Arena", "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron" }
-
--- ###########################################################
 
 local initialSearchZone = { unpack(SearchZone) }
 local initialSearchClass = { unpack(SearchClass) }
@@ -136,10 +134,6 @@ end
 -- Function to start the search
 function GINVITER_StartSearch()
     if CanGuildInvite() then
-        if GINVITER_CheckGuildMemberCount() then
-            return
-        end
-
         searching = true
         lastSearchTime = time()
         GINVITER_SendSearch()
