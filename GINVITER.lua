@@ -31,7 +31,7 @@ local currentZone = 1
 local currentClass = 1
 local excludeList = {}
 
-
+-- UI frame
 local frame = CreateFrame("Frame", "GINVITERFrame", UIParent)
 frame:SetSize(145, 135)
 frame:SetPoint("CENTER")
@@ -112,22 +112,24 @@ else
 end
 stopButton:SetScript("OnClick", function() GINVITER_StopSearch() end)
 
-
+-- Add to exclusion list
 local function GINVITER_AddToExcludeList(playerName)
     excludeList[playerName] = (excludeList[playerName] or 0) + 1
 end
 
+-- Excluded list
 local function GINVITER_IsExcluded(playerName)
     return excludeList[playerName] and excludeList[playerName] >= maxInvites
 end
 
+-- Slash Cmds
 local function GINVITER_Command(args)
     if (args == "show") then
         frame:Show()
     elseif (args == "hide") then
         frame:Hide()
     else
-        ChatFrame1:AddMessage("Usage: /ginviter [show/hide]")
+        print("Usage: /ginviter [show/hide]")
     end
 end
 
@@ -187,13 +189,12 @@ function GINVITER_CheckGuildMemberCount()
     if GetNumGuildMembers() >= 1000 then
         GINVITER_StopSearch()
         print("|cffffff00GInviter:|r Guild Full.")
-        return true -- Indicate that the guild is full
+        return true
     end
-    return false -- Indicate that the guild is not full
+    return false
 end
 
-
--- Table Cloning for Restart purposes
+-- Table clone
 function table.clone(...)
     local clones = {...}
     local result = {}
@@ -201,7 +202,7 @@ function table.clone(...)
     for i, clone in ipairs(clones) do
         for key, value in pairs(clone) do
             if type(value) == "table" then
-                result[key] = table.clone(value) -- Recursively clone nested tables
+                result[key] = table.clone(value)
             else
                 result[key] = value
             end
@@ -249,7 +250,6 @@ end
 
 -- Function to handle the update
 local function GINVITER_OnUpdate(args)
-    -- Check guild member count
     GINVITER_CheckGuildMemberCount()
 
     if searching then
@@ -266,25 +266,22 @@ local function GINVITER_OnUpdate(args)
             errorText:SetText("")
         end
     else
-        -- Check if the search has completed for both modes and restart the search
         if #SearchZone == 0 or #SearchClass == 0 then
-            -- Reset SearchZone to initial values if all zones have been searched
+
             if #SearchZone == 0 then
                 SearchZone = table.clone(initialSearchZone)
             end
 
-            -- Reset SearchClass to initial values if all classes have been searched
             if #SearchClass == 0 then
                 SearchClass = table.clone(initialSearchClass)
             end
 
             if not searching then
-                GINVITER_RestartSearch() -- Restart the search
+                GINVITER_RestartSearch()
             end
         end
     end
 end
-
 
 function GINVITER_OnEvent(args)
     if (searching == false) then return end
