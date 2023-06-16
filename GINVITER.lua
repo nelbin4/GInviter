@@ -133,10 +133,6 @@ end
 
 function GINVITER_StartSearch()
     if CanGuildInvite() then
-        if GINVITER_CheckGuildMemberCount() then
-            return -- Stop the search if the guild is full
-        end
-
         local initialSearchZone = table.clone(SearchZone)
         local initialSearchClass = table.clone(SearchClass)
         statusText:SetText("Searching")
